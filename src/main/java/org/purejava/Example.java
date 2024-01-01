@@ -11,8 +11,8 @@ public class Example {
 
         String accessToken = System.getenv("ACCESS_TOKEN");
         UUID organizationId = UUID.fromString(System.getenv("ORGANIZATION_ID"));
-        String apiUrl = System.getenv("API_URL");
-        String identityUrl = System.getenv("IDENTITY_URL");
+        String apiUrl = "https://api.bitwarden.com";
+        String identityUrl = "https://identity.bitwarden.com";
 
         // Configuring the URLS is optional, remove them to use the default values
         BitwardenSettings bitwardenSettings = new BitwardenSettings();
