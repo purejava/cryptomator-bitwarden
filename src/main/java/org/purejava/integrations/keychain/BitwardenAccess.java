@@ -26,6 +26,7 @@ public class BitwardenAccess implements KeychainAccessProvider {
     private final String APP_NAME = "Cryptomator";
 
     public BitwardenAccess() {
+        // ToDo fix missing or wrong env vars
         this.accessToken = System.getenv("BITWARDEN_ACCESS_TOKEN");
         this.organizationId = UUID.fromString(System.getenv("BITWARDEN_ORGANIZATION_ID"));
         this.bitwardenSettings.setApiUrl(apiUrl);
