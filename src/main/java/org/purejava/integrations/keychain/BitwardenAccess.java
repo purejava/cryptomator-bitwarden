@@ -27,6 +27,7 @@ public class BitwardenAccess implements KeychainAccessProvider {
 
     public BitwardenAccess() {
         // ToDo fix missing or wrong env vars
+        // ToDo check, what happens, if network is unavailable
         this.accessToken = System.getenv("BITWARDEN_ACCESS_TOKEN");
         this.organizationId = UUID.fromString(System.getenv("BITWARDEN_ORGANIZATION_ID"));
         this.bitwardenSettings.setApiUrl(apiUrl);
