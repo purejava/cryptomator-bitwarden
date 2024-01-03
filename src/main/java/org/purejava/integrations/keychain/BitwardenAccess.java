@@ -39,11 +39,10 @@ public class BitwardenAccess implements KeychainAccessProvider {
     @Override
     public String displayName() { return "Bitwarden"; }
 
-    // ToDo check, if this is ok no or wrong IDs
+    // ToDo check, if this is ok, no for wrong IDs
     @Override
     public boolean isSupported() { return true; }
 
-    // ToDo check, if this is ok
     @Override
     public boolean isLocked() { return false; }
 
@@ -56,7 +55,7 @@ public class BitwardenAccess implements KeychainAccessProvider {
     public void storePassphrase(String vault, String name, CharSequence password) throws KeychainAccessException {
         var projectResponse = bitwardenClient.projects().create(organizationId, APP_NAME);
         var projectId = projectResponse.getID();
-        var secretResponse = bitwardenClient.secrets().create(vault, password.toString(), "", organizationId, new UUID[]{projectId});
+        var secretResponse = bitwardenClient.secrets().create(vault, password.toString(), "Password for vault: " + name, organizationId, new UUID[]{projectId});
     }
 
     @Override
