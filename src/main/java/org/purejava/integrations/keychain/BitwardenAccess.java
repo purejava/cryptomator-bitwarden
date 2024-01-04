@@ -77,7 +77,20 @@ public class BitwardenAccess implements KeychainAccessProvider {
 
     @Override
     public char[] loadPassphrase(String vault) throws KeychainAccessException {
-        return null;
+        try {
+            var secret = Arrays.stream(bitwardenClient.secrets().list(organizationId).getData())
+                    .filter(r -> r.getKey().equals(vault))
+                    .findFirst();
+            if (secret.isEmpty()) {
+                LOG.debug("No Passphrase found");
+                return null;
+            } else {
+                LOG.debug("Passphrase loaded");
+                return secret.get().getKey().toCharArray();
+            }
+        } catch (BitwardenClientException | IllegalArgumentException e) {
+            throw new KeychainAccessException("Loading the passphrase failed", e);
+        }
     }
 
     @Override
