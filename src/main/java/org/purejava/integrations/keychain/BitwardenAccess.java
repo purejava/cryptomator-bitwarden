@@ -1,15 +1,14 @@
 package org.purejava.integrations.keychain;
 
 import com.bitwarden.sdk.BitwardenClient;
+import com.bitwarden.sdk.BitwardenClientException;
 import com.bitwarden.sdk.BitwardenSettings;
 import org.cryptomator.integrations.keychain.KeychainAccessException;
 import org.cryptomator.integrations.keychain.KeychainAccessProvider;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
+import java.util.Arrays;
 import java.util.UUID;
 
 public class BitwardenAccess implements KeychainAccessProvider {
@@ -53,9 +52,27 @@ public class BitwardenAccess implements KeychainAccessProvider {
 
     @Override
     public void storePassphrase(String vault, String name, CharSequence password) throws KeychainAccessException {
-        var projectResponse = bitwardenClient.projects().create(organizationId, APP_NAME);
-        var projectId = projectResponse.getID();
-        var secretResponse = bitwardenClient.secrets().create(vault, password.toString(), "Password for vault: " + name, organizationId, new UUID[]{projectId});
+        UUID projectId;
+        try {
+            var project = Arrays.stream(bitwardenClient.projects().list(organizationId).getData())
+                    .filter(r -> r.getName().equals(APP_NAME))
+                    .findFirst();
+            if (project.isPresent()) {
+                projectId = project.get().getID();
+            } else {
+                projectId = bitwardenClient.projects().create(organizationId, APP_NAME).getID();
+            }
+
+            var secret = Arrays.stream(bitwardenClient.secrets().list(organizationId).getData())
+                    .filter(r -> r.getKey().equals(vault))
+                    .findFirst();
+            if (secret.isEmpty()) {
+                bitwardenClient.secrets().create(vault, password.toString(), "Password for vault: " + name, organizationId, new UUID[]{projectId});
+            }
+            LOG.debug("Passphrase successfully stored");
+        } catch (BitwardenClientException | IllegalArgumentException e) {
+            throw new KeychainAccessException("Storing the passphrase failed", e);
+        }
     }
 
     @Override
