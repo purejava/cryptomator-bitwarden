@@ -86,7 +86,7 @@ public class BitwardenAccess implements KeychainAccessProvider {
                 return null;
             } else {
                 LOG.debug("Passphrase loaded");
-                return secret.get().getKey().toCharArray();
+                return bitwardenClient.secrets().get(secret.get().getID()).getValue().toCharArray();
             }
         } catch (BitwardenClientException | IllegalArgumentException e) {
             throw new KeychainAccessException("Loading the passphrase failed", e);
