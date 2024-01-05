@@ -3,12 +3,14 @@ package org.purejava.integrations.keychain;
 import com.bitwarden.sdk.BitwardenClient;
 import com.bitwarden.sdk.BitwardenClientException;
 import com.bitwarden.sdk.BitwardenSettings;
+import com.bitwarden.sdk.schema.SecretIdentifierResponse;
 import org.cryptomator.integrations.keychain.KeychainAccessException;
 import org.cryptomator.integrations.keychain.KeychainAccessProvider;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.util.Arrays;
+import java.util.Optional;
 import java.util.UUID;
 
 public class BitwardenAccess implements KeychainAccessProvider {
@@ -21,7 +23,6 @@ public class BitwardenAccess implements KeychainAccessProvider {
     private final UUID organizationId;
     private final String apiUrl = "https://api.bitwarden.com";
     private final String identityUrl = "https://identity.bitwarden.com";
-    private final String URL_SCHEME = "https://";
     private final String APP_NAME = "Cryptomator";
 
     public BitwardenAccess() {
@@ -52,20 +53,9 @@ public class BitwardenAccess implements KeychainAccessProvider {
 
     @Override
     public void storePassphrase(String vault, String name, CharSequence password) throws KeychainAccessException {
-        UUID projectId;
         try {
-            var project = Arrays.stream(bitwardenClient.projects().list(organizationId).getData())
-                    .filter(r -> r.getName().equals(APP_NAME))
-                    .findFirst();
-            if (project.isPresent()) {
-                projectId = project.get().getID();
-            } else {
-                projectId = bitwardenClient.projects().create(organizationId, APP_NAME).getID();
-            }
-
-            var secret = Arrays.stream(bitwardenClient.secrets().list(organizationId).getData())
-                    .filter(r -> r.getKey().equals(vault))
-                    .findFirst();
+            var projectId = getprojectId();
+            var secret = getSecret(vault);
             if (secret.isEmpty()) {
                 bitwardenClient.secrets().create(vault, password.toString(), "Password for vault: " + name, organizationId, new UUID[]{ projectId });
             }
@@ -78,9 +68,7 @@ public class BitwardenAccess implements KeychainAccessProvider {
     @Override
     public char[] loadPassphrase(String vault) throws KeychainAccessException {
         try {
-            var secret = Arrays.stream(bitwardenClient.secrets().list(organizationId).getData())
-                    .filter(r -> r.getKey().equals(vault))
-                    .findFirst();
+            var secret = getSecret(vault);
             if (secret.isEmpty()) {
                 LOG.debug("No Passphrase found");
                 return null;
@@ -96,9 +84,7 @@ public class BitwardenAccess implements KeychainAccessProvider {
     @Override
     public void deletePassphrase(String vault) throws KeychainAccessException {
         try {
-            var secret = Arrays.stream(bitwardenClient.secrets().list(organizationId).getData())
-                    .filter(r -> r.getKey().equals(vault))
-                    .findFirst();
+            var secret = getSecret(vault);
             if (secret.isEmpty()) {
                 LOG.debug("Passphrase not found");
             } else {
@@ -117,20 +103,9 @@ public class BitwardenAccess implements KeychainAccessProvider {
 
     @Override
     public void changePassphrase(String vault, String name, CharSequence password) throws KeychainAccessException {
-        UUID projectId;
         try {
-            var project = Arrays.stream(bitwardenClient.projects().list(organizationId).getData())
-                    .filter(r -> r.getName().equals(APP_NAME))
-                    .findFirst();
-            if (project.isPresent()) {
-                projectId = project.get().getID();
-            } else {
-                projectId = bitwardenClient.projects().create(organizationId, APP_NAME).getID();
-            }
-
-            var secret = Arrays.stream(bitwardenClient.secrets().list(organizationId).getData())
-                    .filter(r -> r.getKey().equals(vault))
-                    .findFirst();
+            var projectId = getprojectId();
+            var secret = getSecret(vault);
             if (secret.isEmpty()) {
                 LOG.debug("Passphrase not found");
             } else {
@@ -140,5 +115,32 @@ public class BitwardenAccess implements KeychainAccessProvider {
         } catch (BitwardenClientException | IllegalArgumentException e) {
             throw new KeychainAccessException("Updating the passphrase failed", e);
         }
+    }
+
+    /**
+     * Lookup projectId or generate a new project, in case none with the given name exists.
+     * @return The projectId of the project.
+     */
+    private UUID getprojectId() throws BitwardenClientException {
+        var project = Arrays.stream(bitwardenClient.projects().list(organizationId).getData())
+                .filter(r -> r.getName().equals(APP_NAME))
+                .findFirst();
+        if (project.isPresent()) {
+            return project.get().getID();
+        } else {
+            return bitwardenClient.projects().create(organizationId, APP_NAME).getID();
+        }
+    }
+
+    /**
+     * Find a secret for the given key (vault).
+     * @param vault The identifier for the secret we are looking for.
+     * @return      An Optional containing the secret or an empty Optional, in case, no secret was found.
+     * @throws BitwardenClientException Communication with the Bitwarden back end failed due to technical reasons.
+     */
+    private Optional<SecretIdentifierResponse> getSecret(String vault) throws BitwardenClientException {
+        return Arrays.stream(bitwardenClient.secrets().list(organizationId).getData())
+                .filter(r -> r.getKey().equals(vault))
+                .findFirst();
     }
 }
