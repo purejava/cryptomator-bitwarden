@@ -67,7 +67,7 @@ public class BitwardenAccess implements KeychainAccessProvider {
                     .filter(r -> r.getKey().equals(vault))
                     .findFirst();
             if (secret.isEmpty()) {
-                bitwardenClient.secrets().create(vault, password.toString(), "Password for vault: " + name, organizationId, new UUID[]{projectId});
+                bitwardenClient.secrets().create(vault, password.toString(), "Password for vault: " + name, organizationId, new UUID[]{ projectId });
             }
             LOG.debug("Passphrase successfully stored");
         } catch (BitwardenClientException | IllegalArgumentException e) {
@@ -104,5 +104,28 @@ public class BitwardenAccess implements KeychainAccessProvider {
 
     @Override
     public void changePassphrase(String vault, String name, CharSequence password) throws KeychainAccessException {
+        UUID projectId;
+        try {
+            var project = Arrays.stream(bitwardenClient.projects().list(organizationId).getData())
+                    .filter(r -> r.getName().equals(APP_NAME))
+                    .findFirst();
+            if (project.isPresent()) {
+                projectId = project.get().getID();
+            } else {
+                projectId = bitwardenClient.projects().create(organizationId, APP_NAME).getID();
+            }
+
+            var secret = Arrays.stream(bitwardenClient.secrets().list(organizationId).getData())
+                    .filter(r -> r.getKey().equals(vault))
+                    .findFirst();
+            if (secret.isEmpty()) {
+                LOG.debug("Passphrase not found");
+            } else {
+                LOG.debug("Passphrase found and updated");
+                bitwardenClient.secrets().update(secret.get().getID(), vault, password.toString(), name, organizationId, new UUID[]{ projectId });
+            }
+        } catch (BitwardenClientException | IllegalArgumentException e) {
+            throw new KeychainAccessException("Updating the passphrase failed", e);
+        }
     }
 }
