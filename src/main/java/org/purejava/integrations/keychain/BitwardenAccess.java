@@ -122,7 +122,7 @@ public class BitwardenAccess implements KeychainAccessProvider {
                 LOG.debug("Passphrase not found");
             } else {
                 LOG.debug("Passphrase found and updated");
-                bitwardenClient.secrets().update(secret.get().getID(), vault, password.toString(), name, organizationId, new UUID[]{ projectId });
+                bitwardenClient.secrets().update(secret.get().getID(), vault, password.toString(), "Password for vault: " + name, organizationId, new UUID[]{ projectId });
             }
         } catch (BitwardenClientException | IllegalArgumentException e) {
             throw new KeychainAccessException("Updating the passphrase failed", e);
