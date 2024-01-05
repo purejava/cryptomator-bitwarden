@@ -95,6 +95,19 @@ public class BitwardenAccess implements KeychainAccessProvider {
 
     @Override
     public void deletePassphrase(String vault) throws KeychainAccessException {
+        try {
+            var secret = Arrays.stream(bitwardenClient.secrets().list(organizationId).getData())
+                    .filter(r -> r.getKey().equals(vault))
+                    .findFirst();
+            if (secret.isEmpty()) {
+                LOG.debug("Passphrase not found");
+            } else {
+                LOG.debug("Passphrase found and deleted");
+                bitwardenClient.secrets().delete(new UUID[]{ secret.get().getID() });
+            }
+        } catch (BitwardenClientException | IllegalArgumentException e) {
+            throw new KeychainAccessException("Deleting the passphrase failed", e);
+        }
     }
 
     @Override
