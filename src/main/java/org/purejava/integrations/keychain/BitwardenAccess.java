@@ -18,30 +18,39 @@ public class BitwardenAccess implements KeychainAccessProvider {
     private static final Logger LOG = LoggerFactory.getLogger(BitwardenAccess.class);
 
     private final BitwardenSettings bitwardenSettings = new BitwardenSettings();
-    private final BitwardenClient bitwardenClient;
+    private BitwardenClient bitwardenClient;
     private final String accessToken;
-    private final UUID organizationId;
+    private UUID organizationId = null;
+    private boolean isSupported = false;
+    private final String boID;
     private final String apiUrl = "https://api.bitwarden.com";
     private final String identityUrl = "https://identity.bitwarden.com";
     private final String APP_NAME = "Cryptomator";
 
     public BitwardenAccess() {
-        // ToDo fix missing or wrong env vars
-        // ToDo check, what happens, if network is unavailable
         this.accessToken = System.getenv("BITWARDEN_ACCESS_TOKEN");
-        this.organizationId = UUID.fromString(System.getenv("BITWARDEN_ORGANIZATION_ID"));
-        this.bitwardenSettings.setApiUrl(apiUrl);
-        this.bitwardenSettings.setIdentityUrl(identityUrl);
-        this.bitwardenClient = new BitwardenClient(bitwardenSettings);
-        this.bitwardenClient.accessTokenLogin(accessToken);
+        this.boID = System.getenv("BITWARDEN_ORGANIZATION_ID");
+
+        if (isEnvVarValid(accessToken) && isEnvVarValid(boID)) {
+            try {
+                this.organizationId = UUID.fromString(boID);
+                this.bitwardenSettings.setApiUrl(apiUrl);
+                this.bitwardenSettings.setIdentityUrl(identityUrl);
+                this.bitwardenClient = new BitwardenClient(bitwardenSettings);
+                this.bitwardenClient.accessTokenLogin(accessToken);
+                this.isSupported = true;
+
+            } catch (BitwardenClientException | IllegalArgumentException e) {
+                LOG.error(e.toString(), e.getCause());
+            }
+        }
     }
 
     @Override
     public String displayName() { return "Bitwarden"; }
 
-    // ToDo check, if this is ok, no for wrong IDs
     @Override
-    public boolean isSupported() { return true; }
+    public boolean isSupported() { return isSupported; }
 
     @Override
     public boolean isLocked() { return false; }
@@ -142,5 +151,9 @@ public class BitwardenAccess implements KeychainAccessProvider {
         return Arrays.stream(bitwardenClient.secrets().list(organizationId).getData())
                 .filter(r -> r.getKey().equals(vault))
                 .findFirst();
+    }
+
+    private boolean isEnvVarValid(String var) {
+        return null != var && !var.isEmpty() && !var.isBlank();
     }
 }
