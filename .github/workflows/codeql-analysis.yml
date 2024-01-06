@@ -15,6 +15,51 @@ jobs:
     runs-on: ubuntu-latest
     if: "!contains(github.event.head_commit.message, '[ci skip]') && !contains(github.event.head_commit.message, '[skip ci]')"
     steps:
+    - uses: whelk-io/maven-settings-xml-action@v21
+      with:
+        repositories: >
+          [
+            {
+              "id": "central",
+              "url": "https://repo1.maven.org/maven2"
+            },
+            {
+              "id": "github",
+              "url": "https://maven.pkg.github.com/bitwarden/sdk",
+              "releases": {
+                  "enabled": "true"
+              },
+              "snapshots": {
+                  "enabled": "true"
+              }
+            }
+          ]
+        servers: >
+          [
+            {
+              "id": "github",
+              "username": "${env.PACKAGES_USER}",
+              "password": "${env.PACKAGES_ACCESS_TOKEN}",
+              "configuration": {
+                "httpConfiguration": {
+                  "all": {
+                    "usePreemptive": "true"
+                  }
+                }
+              }
+            }
+          ]
+        profiles: >
+          [
+            {
+              "id": "github"
+            }
+          ]
+        active_profiles: >
+          [
+            "github"
+          ]
+        output_file: .m2/settings.xml
     - uses: actions/checkout@v4
       with:
         fetch-depth: 2
@@ -22,6 +67,7 @@ jobs:
       with:
         distribution: 'temurin'
         java-version: '20'
+        overwrite-settings: 'false'
     - uses: actions/cache@v3
       with:
         path: ~/.m2/repository
@@ -34,5 +80,8 @@ jobs:
         languages: java
     - name: Build
       run: mvn -B compile
+      env:
+        PACKAGES_USER: ${{ secrets.PACKAGES_USER }}
+        PACKAGES_ACCESS_TOKEN: ${{ secrets.PACKAGES_ACCESS_TOKEN }}
     - name: Perform CodeQL Analysis
       uses: github/codeql-action/analyze@v2
