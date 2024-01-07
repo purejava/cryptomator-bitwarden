@@ -1,6 +1,7 @@
 # cryptomator-bitwarden
 ![cryptomator-bitwarden](cryptomator-bitwarden.png)
 
+[![Codacy Badge](https://app.codacy.com/project/badge/Grade/a5c7592b9a9d415fbe648c85c1c0a3e5)](https://app.codacy.com/gh/purejava/cryptomator-bitwarden/dashboard?utm_source=gh&utm_medium=referral&utm_content=&utm_campaign=Badge_grade)
 [![GitHub Release](https://img.shields.io/github/v/release/purejava/cryptomator-bitwarden)](https://github.com/purejava/cryptomator-bitwarden/releases)
 [![License](https://img.shields.io/github/license/purejava/cryptomator-bitwarden.svg)](https://github.com/purejava/cryptomator-bitwarden/blob/master/LICENSE)
 [![Donate](https://img.shields.io/badge/Donate-PayPal-green.svg)](https://www.paypal.com/donate?hosted_button_id=XVX9ZM7WE4ANL)
