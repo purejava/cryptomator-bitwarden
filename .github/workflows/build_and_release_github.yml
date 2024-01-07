@@ -14,7 +14,7 @@ jobs:
       - uses: "marvinpinto/action-automatic-releases@latest"
         id: create_release
         with:
-          repo_token: "${{ secrets.GITHUB_TOKEN }}"
+          repo_token: "${{ secrets.PACKAGES_ACCESS_TOKEN }}"
           prerelease: false
           draft: true
 
