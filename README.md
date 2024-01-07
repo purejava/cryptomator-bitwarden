@@ -1,6 +1,7 @@
 # cryptomator-bitwarden
 ![cryptomator-bitwarden](cryptomator-bitwarden.png)
 
+[![Java CI with Maven](https://github.com/purejava/cryptomator-bitwarden/workflows/Java%20CI%20with%20Maven/badge.svg)](https://github.com/purejava/cryptomator-bitwarden/actions?query=workflow%3A%22Java+CI+with+Maven%22)
 [![Codacy Badge](https://app.codacy.com/project/badge/Grade/a5c7592b9a9d415fbe648c85c1c0a3e5)](https://app.codacy.com/gh/purejava/cryptomator-bitwarden/dashboard?utm_source=gh&utm_medium=referral&utm_content=&utm_campaign=Badge_grade)
 [![GitHub Release](https://img.shields.io/github/v/release/purejava/cryptomator-bitwarden)](https://github.com/purejava/cryptomator-bitwarden/releases)
 [![License](https://img.shields.io/github/license/purejava/cryptomator-bitwarden.svg)](https://github.com/purejava/cryptomator-bitwarden/blob/master/LICENSE)
