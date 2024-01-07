@@ -22,7 +22,7 @@ jobs:
         run: echo "${{ steps.create_release.outputs.upload_url }}" > release_url.txt
 
       - name: Save Release URL file for publish
-        uses: actions/upload-artifact@v3
+        uses: actions/upload-artifact@v4
         with:
           name: release_url
           path: release_url.txt
@@ -34,7 +34,7 @@ jobs:
         run: echo "${{ steps.tagName.outputs.tag }}" > git_tag.txt
 
       - name: Save git tag file for publish
-        uses: actions/upload-artifact@v3
+        uses: actions/upload-artifact@v4
         with:
           name: git_tag
           path: git_tag.txt
@@ -110,7 +110,7 @@ jobs:
           PACKAGES_ACCESS_TOKEN: ${{ secrets.PACKAGES_ACCESS_TOKEN }}
 
       - name: Load Release URL File from release job
-        uses: actions/download-artifact@v3
+        uses: actions/download-artifact@v4
         with:
           name: release_url
       - name: Get Release File Name & Upload URL
@@ -119,7 +119,7 @@ jobs:
           value=`cat release_url.txt`
           echo ::set-output name=upload_url::$value
       - name: Load git tag from release job
-        uses: actions/download-artifact@v3
+        uses: actions/download-artifact@v4
         with:
           name: git_tag
       - name: Get git tag info
