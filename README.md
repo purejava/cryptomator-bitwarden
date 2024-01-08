@@ -7,7 +7,7 @@
 [![License](https://img.shields.io/github/license/purejava/cryptomator-bitwarden.svg)](https://github.com/purejava/cryptomator-bitwarden/blob/master/LICENSE)
 [![Donate](https://img.shields.io/badge/Donate-PayPal-green.svg)](https://www.paypal.com/donate?hosted_button_id=XVX9ZM7WE4ANL)
 
-Plug-in for Cryptomator to store vault passwords in Bitwarden
+Plug-in for Cryptomator to store vault passwords in Bitwarden Secrets Manager
 
 # Dependency
 Add `cryptomator-bitwarden` as a dependency to your project:
