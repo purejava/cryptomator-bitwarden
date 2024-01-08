@@ -37,7 +37,7 @@
 
         <api.version>1.3.0</api.version>
         <bitwarden.version>0.4.0-SNAPSHOT</bitwarden.version>
-        <slf4j.version>2.0.9</slf4j.version>
+        <slf4j.version>2.0.10</slf4j.version>
         <junit.version>5.10.1</junit.version>
     </properties>
 
