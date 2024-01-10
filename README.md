@@ -17,6 +17,9 @@ If you like this project, you can give me a cup of coffee :)
 
 [![paypal](https://www.paypalobjects.com/en_US/i/btn/btn_donateCC_LG.gif)](https://www.paypal.com/donate?hosted_button_id=XVX9ZM7WE4ANL)
 
+# Thank you
+Thanks to Luka Potkonjak, who added a Java wrapper to the Bitwarden native C library for the SDK and exposed its commands through a BitwardenClient class.
+
 # Copyright
 Copyright (C) 2024 Ralph Plawetzki
 
