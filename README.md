@@ -9,15 +9,8 @@
 
 Plug-in for Cryptomator to store vault passwords in Bitwarden Secrets Manager
 
-# Dependency
-Add `cryptomator-bitwarden` as a dependency to your project:
-```maven
-<dependency>
-    <groupId>org.purejava</groupId>
-    <artifactId>cryptomator-bitwarden</artifactId>
-    <version>0.4.0-SNAPSHOT</version>
-</dependency>
-```
+# Documentation
+For documentation please take a look at the [Wiki](https://github.com/purejava/cryptomator-bitwarden/wiki).
 
 # Donation
 If you like this project, you can give me a cup of coffee :)
