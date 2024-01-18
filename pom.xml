@@ -6,7 +6,7 @@
 
     <groupId>org.purejava</groupId>
     <artifactId>cryptomator-bitwarden</artifactId>
-    <version>ps-fix-arch-SNAPSHOT</version>
+    <version>0.4.0-SNAPSHOT-fix-arch</version>
 
     <name>cryptomator-bitwarden</name>
     <description>Plug-in for Cryptomator to store vault passwords in Bitwarden</description>
