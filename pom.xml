@@ -37,7 +37,7 @@
 
         <api.version>1.3.0</api.version>
         <bitwarden.version>ps-fix-arch-SNAPSHOT</bitwarden.version>
-        <slf4j.version>2.0.11</slf4j.version>
+        <slf4j.version>2.0.12</slf4j.version>
         <junit.version>5.10.2</junit.version>
     </properties>
 
