@@ -27,11 +27,6 @@ jobs:
     - name: Checkout repository
       uses: actions/checkout@v4
 
-    - name: Initialize CodeQL
-      uses: github/codeql-action/init@v3
-      with:
-        languages: java
-
     - name: Generate Maven settings
       uses: whelk-io/maven-settings-xml-action@v21
       with:
@@ -78,6 +73,11 @@ jobs:
             "github"
           ]
         output_file: .m2/settings.xml
+
+    - name: Initialize CodeQL
+      uses: github/codeql-action/init@v3
+      with:
+        languages: java
 
     - name: Setup Java
       uses: actions/setup-java@v4
