@@ -103,7 +103,7 @@ jobs:
         env:
           GPG_PRIVATE_KEY: ${{ secrets.GPG_PRIVATE_KEY }}
       - name: Build with Maven
-        run: mvn -B -Psign -Dgpg.passphrase=${GPG_PASSPHRASE} -Dtest=org.purejava.integrations.keychain.BitwardenAccessTest install --file pom.xml
+        run: mvn -B -Psign -Dgpg.passphrase=${GPG_PASSPHRASE} -Dtest=org.purejava.integrations.keychain.BitwardenAccessTest install --settings .m2/settings.xml --file pom.xml
         env:
           GPG_PASSPHRASE: ${{ secrets.GPG_PASSPHRASE }}
           PACKAGES_USER: ${{ secrets.PACKAGES_USER }}
