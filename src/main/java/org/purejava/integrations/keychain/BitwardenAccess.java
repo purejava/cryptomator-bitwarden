@@ -21,6 +21,7 @@ public class BitwardenAccess implements KeychainAccessProvider {
     private BitwardenClient bitwardenClient;
     private final String accessToken;
     private UUID organizationId = null;
+    private final String stateFile;
     private boolean isSupported = false;
     private final String boID;
     private final String apiUrl = "https://api.bitwarden.com";
@@ -30,6 +31,7 @@ public class BitwardenAccess implements KeychainAccessProvider {
     public BitwardenAccess() {
         this.accessToken = System.getenv("BITWARDEN_ACCESS_TOKEN");
         this.boID = System.getenv("BITWARDEN_ORGANIZATION_ID");
+        this.stateFile = System.getenv("BITWARDEN_STATE_FILE");
 
         if (isEnvVarValid(accessToken) && isEnvVarValid(boID)) {
             try {
@@ -37,7 +39,7 @@ public class BitwardenAccess implements KeychainAccessProvider {
                 this.bitwardenSettings.setApiUrl(apiUrl);
                 this.bitwardenSettings.setIdentityUrl(identityUrl);
                 this.bitwardenClient = new BitwardenClient(bitwardenSettings);
-                this.bitwardenClient.accessTokenLogin(accessToken);
+                this.bitwardenClient.auth().loginAccessToken(accessToken, stateFile);
                 this.isSupported = true;
 
             } catch (BitwardenClientException | IllegalArgumentException e) {
@@ -56,17 +58,17 @@ public class BitwardenAccess implements KeychainAccessProvider {
     public boolean isLocked() { return false; }
 
     @Override
-    public void storePassphrase(String vault, CharSequence password) throws KeychainAccessException {
-        storePassphrase(vault, "Vault", password);
+    public void storePassphrase(String vault, String displayName, CharSequence password) throws KeychainAccessException {
+        storePassphrase(vault, displayName, password, false);
     }
 
     @Override
-    public void storePassphrase(String vault, String name, CharSequence password) throws KeychainAccessException {
+    public void storePassphrase(String vault, String name, CharSequence password, boolean requireOsAuthentication) throws KeychainAccessException {
         try {
             var projectId = getprojectId();
             var secret = getSecret(vault);
             if (secret.isEmpty()) {
-                bitwardenClient.secrets().create(vault, password.toString(), "Password for vault: " + name, organizationId, new UUID[]{ projectId });
+                bitwardenClient.secrets().create(organizationId, vault, password.toString(), "Password for vault: " + name, new UUID[]{ projectId });
             }
             LOG.debug("Passphrase successfully stored");
         } catch (BitwardenClientException | IllegalArgumentException e) {
@@ -119,7 +121,7 @@ public class BitwardenAccess implements KeychainAccessProvider {
                 LOG.debug("Passphrase not found");
             } else {
                 LOG.debug("Passphrase found and updated");
-                bitwardenClient.secrets().update(secret.get().getID(), vault, password.toString(), "Password for vault: " + name, organizationId, new UUID[]{ projectId });
+                bitwardenClient.secrets().update(organizationId, secret.get().getID(), vault, password.toString(), "Password for vault: " + name, new UUID[]{ projectId });
             }
         } catch (BitwardenClientException | IllegalArgumentException e) {
             throw new KeychainAccessException("Updating the passphrase failed", e);
