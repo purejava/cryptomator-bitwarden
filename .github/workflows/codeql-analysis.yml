@@ -86,6 +86,9 @@ jobs:
         java-version: '20'
         overwrite-settings: 'false'
 
+    - name: Check
+      run: cat ${{ github.workspace }}/.m2/settings.xml
+
     - name: Build
       run: mvn -s ${{ github.workspace }}/.m2/settings.xml -B compile
       env:
