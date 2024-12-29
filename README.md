@@ -21,6 +21,6 @@ If you like this project, you can give me a cup of coffee :)
 Thanks to Luka Potkonjak, who added a Java wrapper to the Bitwarden native C library for the SDK and exposed its commands through a BitwardenClient class.
 
 # Copyright
-Copyright (C) 2024 Ralph Plawetzki
+Copyright (C) 2024-2025 Ralph Plawetzki
 
 The Shield Minimalistic SVG Vector logo is made by [Solar Icons](https://www.svgrepo.com/author/Solar%20Icons/) and is published under the [CC Attribution License](https://creativecommons.org/licenses/by/4.0/?ref=chooser-v1) (CC BY 4.0 Deed)
