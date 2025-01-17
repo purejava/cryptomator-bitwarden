@@ -42,6 +42,8 @@ jobs:
         env:
           GPG_SIGNING_KEY: ${{ secrets.GPG_PRIVATE_KEY }}
           GPG_SIGNING_PASSPHRASE: ${{ secrets.GPG_PASSPHRASE }}
+          PACKAGES_USER: ${{ secrets.PACKAGES_USER }}
+          PACKAGES_ACCESS_TOKEN: ${{ secrets.PACKAGES_ACCESS_TOKEN }}
 
       - name: Release package
         run: ./gradlew githubRelease
