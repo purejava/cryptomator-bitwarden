@@ -126,7 +126,8 @@ githubRelease {
     setBody("[![Downloads](https://img.shields.io/github/downloads/purejava/cryptomator-bitwarden/latest/cryptomator-bitwarden-${project.version}.jar)](https://github.com/purejava/cryptomator-bitwarden/releases/latest/download/cryptomator-bitwarden-${project.version}.jar)\n" +
             "\n" +
             "- xxx")
-    releaseAssets = fileTree(dir: "${buildDir}/libs", includes: [
+    setGenerateReleaseNotes(true)
+    releaseAssets = fileTree(dir: "${layout.buildDirectory}/libs", includes: [
             "cryptomator-bitwarden-${version}.jar",
             "cryptomator-bitwarden-${version}.jar.asc",
             "cryptomator-bitwarden-${version}-sources.jar",
