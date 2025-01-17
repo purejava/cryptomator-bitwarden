@@ -82,7 +82,8 @@ jobs:
       if: ${{ matrix.language == 'java' && github.repository_owner != 'gradle' }}
       run: ./gradlew --init-script .github/workflows/codeql-analysis.init.gradle -S testClasses
       env:
-        RELEASE_GRADLE_PLUGIN_TOKEN: ${{ secrets.RELEASE_GRADLE_PLUGIN_TOKEN }}
+        PACKAGES_USER: ${{ secrets.PACKAGES_USER }}
+        PACKAGES_ACCESS_TOKEN: ${{ secrets.PACKAGES_ACCESS_TOKEN }}
 
     - name: Cleanup Gradle Daemons
       run: ./gradlew --stop
