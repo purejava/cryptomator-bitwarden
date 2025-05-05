@@ -27,11 +27,20 @@ public class BitwardenAccess implements KeychainAccessProvider {
     private final String apiUrl = "https://api.bitwarden.com";
     private final String identityUrl = "https://identity.bitwarden.com";
     private final String APP_NAME = "Cryptomator";
+    private final String envApiUrl;
+    private final String envIdentityUrl;
 
     public BitwardenAccess() {
         this.accessToken = System.getenv("BITWARDEN_ACCESS_TOKEN");
         this.boID = System.getenv("BITWARDEN_ORGANIZATION_ID");
         this.stateFile = System.getenv("BITWARDEN_STATE_FILE");
+        this.envApiUrl = System.getenv("BITWARDEN_API_URL");
+        this.envIdentityUrl = System.getenv("BITWARDEN_IDENTITY_URL");
+
+        if (isEnvVarValid(envApiUrl) && isEnvVarValid(envIdentityUrl)) {
+            this.apiUrl = envApiUrl;
+            this.identityUrl = envIdentityUrl;
+        }
 
         if (isEnvVarValid(accessToken) && isEnvVarValid(boID)) {
             try {
