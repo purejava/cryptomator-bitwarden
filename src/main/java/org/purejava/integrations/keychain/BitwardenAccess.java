@@ -24,23 +24,22 @@ public class BitwardenAccess implements KeychainAccessProvider {
     private final String stateFile;
     private boolean isSupported = false;
     private final String boID;
-    private final String apiUrl = "https://api.bitwarden.com";
-    private final String identityUrl = "https://identity.bitwarden.com";
+    private final String apiUrl;
+    private final String identityUrl;
     private final String APP_NAME = "Cryptomator";
-    private final String envApiUrl;
-    private final String envIdentityUrl;
 
     public BitwardenAccess() {
         this.accessToken = System.getenv("BITWARDEN_ACCESS_TOKEN");
         this.boID = System.getenv("BITWARDEN_ORGANIZATION_ID");
         this.stateFile = System.getenv("BITWARDEN_STATE_FILE");
-        this.envApiUrl = System.getenv("BITWARDEN_API_URL");
-        this.envIdentityUrl = System.getenv("BITWARDEN_IDENTITY_URL");
 
-        if (isEnvVarValid(envApiUrl) && isEnvVarValid(envIdentityUrl)) {
-            this.apiUrl = envApiUrl;
-            this.identityUrl = envIdentityUrl;
-        }
+        var envApiUrl = System.getenv("BITWARDEN_API_URL");
+        var envIdentityUrl = System.getenv("BITWARDEN_IDENTITY_URL");
+
+        var endpoint = resolveEndpoint(envApiUrl, envIdentityUrl);
+
+        this.apiUrl = endpoint.apiUrl;
+        this.identityUrl = endpoint.identityUrl;
 
         if (isEnvVarValid(accessToken) && isEnvVarValid(boID)) {
             try {
@@ -164,6 +163,47 @@ public class BitwardenAccess implements KeychainAccessProvider {
                 .findFirst();
     }
 
+    /**
+     * Resolve the Bitwarden endpoint based on the provided environment variables.
+     * @param apiUrlEnv The API URL environment variable.
+     * @param identityUrlEnv The Identity URL environment variable.
+     * @return The resolved Bitwarden endpoint.
+     */
+    private BitwardenEndpoint resolveEndpoint(String apiUrlEnv, String identityUrlEnv) {
+        if (isEnvVarValid(apiUrlEnv) && isEnvVarValid(identityUrlEnv)) {
+            for (BitwardenEndpoint endpoint : BitwardenEndpoint.values()) {
+                if (endpoint.apiUrl.equals(apiUrlEnv) && endpoint.identityUrl.equals(identityUrlEnv)) {
+                    return endpoint;
+                }
+            }
+            LOG.warn("Provided API/Identity URLs are invalid. Falling back to default (US).");
+        } else {
+            LOG.info("API/Identity URLs not set. Falling back to default (US).");
+        }
+        return BitwardenEndpoint.US;
+    }
+
+    /**
+     * Enum to represent the Bitwarden endpoints.
+     */
+    enum BitwardenEndpoint {
+        US("https://api.bitwarden.com", "https://identity.bitwarden.com"),
+        EU("https://api.bitwarden.eu", "https://identity.bitwarden.eu");
+
+        private final String apiUrl;
+        private final String identityUrl;
+
+        BitwardenEndpoint(String apiUrl, String identityUrl) {
+            this.apiUrl = apiUrl;
+            this.identityUrl = identityUrl;
+        }
+    }
+
+    /**
+     * Check if the given environment variable is valid.
+     * @param var The environment variable to check.
+     * @return true if the variable is valid, false otherwise.
+     */
     private boolean isEnvVarValid(String var) {
         return null != var && !var.isEmpty() && !var.isBlank();
     }
