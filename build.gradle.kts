@@ -12,6 +12,7 @@ val gitHubPackagesToken: String = System.getenv("PACKAGES_ACCESS_TOKEN") ?: ""
 val releaseGradlePluginToken: String = System.getenv("RELEASE_GRADLE_PLUGIN_TOKEN") ?: ""
 
 repositories {
+    mavenCentral()
     mavenLocal()
     maven {
         name = "GitHubPackages"
