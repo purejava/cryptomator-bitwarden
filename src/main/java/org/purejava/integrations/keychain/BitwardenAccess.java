@@ -165,7 +165,7 @@ public class BitwardenAccess implements KeychainAccessProvider {
 
     /**
      * Resolve the Bitwarden endpoint based on the provided environment variables.
-     * @param apiUrlEnv The API URL environment variable.
+     * @param apiUrlEnv      The API URL environment variable.
      * @param identityUrlEnv The Identity URL environment variable.
      * @return The resolved Bitwarden endpoint.
      */
@@ -200,9 +200,9 @@ public class BitwardenAccess implements KeychainAccessProvider {
     }
 
     /**
-     * Check if the given environment variable is valid.
+     * Check if the given environment variable is set.
      * @param var The environment variable to check.
-     * @return true if the variable is valid, false otherwise.
+     * @return true if the variable is set and is not empty, false otherwise.
      */
     private boolean isEnvVarValid(String var) {
         return null != var && !var.isEmpty() && !var.isBlank();
