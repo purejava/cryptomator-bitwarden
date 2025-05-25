@@ -57,7 +57,7 @@ public class BitwardenAccess implements KeychainAccessProvider {
     }
 
     @Override
-    public String displayName() { return "Bitwarden"; }
+    public String getName() { return "Bitwarden"; }
 
     @Override
     public boolean isSupported() { return isSupported; }
@@ -66,12 +66,7 @@ public class BitwardenAccess implements KeychainAccessProvider {
     public boolean isLocked() { return false; }
 
     @Override
-    public void storePassphrase(String vault, String displayName, CharSequence password) throws KeychainAccessException {
-        storePassphrase(vault, displayName, password, false);
-    }
-
-    @Override
-    public void storePassphrase(String vault, String name, CharSequence password, boolean requireOsAuthentication) throws KeychainAccessException {
+    public void storePassphrase(String vault, String name, CharSequence password) throws KeychainAccessException {
         try {
             var projectId = getprojectId();
             var secret = getSecret(vault);
@@ -113,11 +108,6 @@ public class BitwardenAccess implements KeychainAccessProvider {
         } catch (BitwardenClientException | IllegalArgumentException e) {
             throw new KeychainAccessException("Deleting the passphrase failed", e);
         }
-    }
-
-    @Override
-    public void changePassphrase(String vault, CharSequence password) throws KeychainAccessException {
-        changePassphrase(vault, "Vault", password);
     }
 
     @Override
