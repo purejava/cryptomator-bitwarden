@@ -105,7 +105,6 @@ tasks.named("githubRelease") {
 
 artifacts {
     archives(tasks.named("shadowJar"))
-    archives(tasks.named("sourcesJar"))
 }
 
 signing {
@@ -130,8 +129,6 @@ githubRelease {
             include(
                 "cryptomator-bitwarden-${version}.jar",
                 "cryptomator-bitwarden-${version}.jar.asc",
-                "cryptomator-bitwarden-${version}-sources.jar",
-                "cryptomator-bitwarden-${version}-sources.jar.asc"
             )
         }
     )
