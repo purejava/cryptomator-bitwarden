@@ -3,7 +3,7 @@
 
 [versions]
 com-bitwarden-sdk-secrets = "1.0.1"
-org-cryptomator-integrations-api = "1.6.0"
+org-cryptomator-integrations-api = "1.7.0"
 org-junit-jupiter-junit-jupiter = "5.13.4"
 org-junit-jupiter-junit-jupiter-api = "5.13.4"
 org-junit-jupiter-junit-jupiter-engine = "5.13.4"
