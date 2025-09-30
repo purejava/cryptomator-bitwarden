@@ -5,6 +5,7 @@ plugins {
     id("java")
     id("java-library")
     id("signing")
+    id("maven-publish")
 }
 
 val gitHubPackagesUser: String = System.getenv("PACKAGES_USER") ?: ""
@@ -103,13 +104,19 @@ tasks.named("githubRelease") {
     dependsOn("signArchives")
 }
 
-artifacts {
-    archives(tasks.named("shadowJar"))
+publishing {
+    publications {
+        create<MavenPublication>("shadow") {
+            artifact(tasks.shadowJar) {
+                classifier = "" // ensure no "-all" suffix
+            }
+        }
+    }
 }
 
 signing {
     useGpgCmd()
-    sign(configurations.archives.get())
+    sign(publishing.publications["shadow"])
 }
 
 githubRelease {
