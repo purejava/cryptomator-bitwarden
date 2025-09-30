@@ -119,6 +119,11 @@ signing {
     sign(publishing.publications["shadow"])
 }
 
+tasks.named("signShadowPublication") {
+    dependsOn(tasks.named("jar"))
+    dependsOn(tasks.named("shadowJar"))
+}
+
 githubRelease {
     token(releaseGradlePluginToken)
     tagName = project.version.toString()
