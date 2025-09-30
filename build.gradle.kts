@@ -98,12 +98,6 @@ tasks.named<com.github.jengelman.gradle.plugins.shadow.tasks.ShadowJar>("shadowJ
     archiveClassifier.set("")
 }
 
-tasks.named("githubRelease") {
-    dependsOn("sourcesJar")
-    dependsOn("javadocJar")
-    dependsOn("signArchives")
-}
-
 publishing {
     publications {
         create<MavenPublication>("shadow") {
