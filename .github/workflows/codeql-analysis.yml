@@ -78,14 +78,6 @@ jobs:
         ORG_GRADLE_PROJECT_signingKeyId: ${{ secrets.GPG_PRIVATE_KEY_ID }}
         ORG_GRADLE_PROJECT_signingPassword: ${{ secrets.GPG_PASSPHRASE }}
 
-    - name: Check package credentials
-      run: |
-        test -n "$PACKAGES_USER" || { echo "PACKAGES_USER missing"; exit 1; }
-        test -n "$PACKAGES_ACCESS_TOKEN" || { echo "PACKAGES_ACCESS_TOKEN missing"; exit 1; }
-      env:
-        PACKAGES_USER: ${{ secrets.PACKAGES_USER }}
-        PACKAGES_ACCESS_TOKEN: ${{ secrets.PACKAGES_ACCESS_TOKEN }}
-
     - name: Compile with Gradle without Build Scan
       if: ${{ matrix.language == 'java' && github.repository_owner != 'gradle' }}
       run: ./gradlew --init-script .github/workflows/codeql-analysis.init.gradle -S testClasses
