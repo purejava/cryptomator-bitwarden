@@ -33,6 +33,7 @@ jobs:
       # Checkout must run before the caching key is computed using the `hashFiles` method
 
     - name: Cache Gradle Modules
+      if: ${{ matrix.language == 'java' }}
       uses: actions/cache@v5
       with:
         path: |
@@ -41,7 +42,6 @@ jobs:
           ~/.gradle/caches/signatures/
           ~/.gradle/caches/keyrings/
         key: ${{ runner.os }}-gradle-cache-${{ hashFiles('gradle/wrapper/gradle-wrapper.properties') }}
-        if: ${{ matrix.language == 'java' }}
 
     - name: Disable checksum offloading
       # See: https://github.com/actions/virtual-environments/issues/1187#issuecomment-686735760
@@ -77,6 +77,14 @@ jobs:
         ORG_GRADLE_PROJECT_signingKey: ${{ secrets.GPG_PRIVATE_KEY }}
         ORG_GRADLE_PROJECT_signingKeyId: ${{ secrets.GPG_PRIVATE_KEY_ID }}
         ORG_GRADLE_PROJECT_signingPassword: ${{ secrets.GPG_PASSPHRASE }}
+
+    - name: Check package credentials
+      run: |
+        test -n "$PACKAGES_USER" || { echo "PACKAGES_USER missing"; exit 1; }
+        test -n "$PACKAGES_ACCESS_TOKEN" || { echo "PACKAGES_ACCESS_TOKEN missing"; exit 1; }
+      env:
+        PACKAGES_USER: ${{ secrets.PACKAGES_USER }}
+        PACKAGES_ACCESS_TOKEN: ${{ secrets.PACKAGES_ACCESS_TOKEN }}
 
     - name: Compile with Gradle without Build Scan
       if: ${{ matrix.language == 'java' && github.repository_owner != 'gradle' }}
