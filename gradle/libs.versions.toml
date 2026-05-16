@@ -8,8 +8,8 @@ org-junit-jupiter-junit-jupiter = "6.0.3"
 org-junit-jupiter-junit-jupiter-api = "6.0.3"
 org-junit-jupiter-junit-jupiter-engine = "6.0.3"
 org-junit-platform-junit-platform-launcher = "6.0.3"
-org-slf4j-slf4j-api = "2.0.17"
-org-slf4j-slf4j-simple = "2.0.17"
+org-slf4j-slf4j-api = "2.0.18"
+org-slf4j-slf4j-simple = "2.0.18"
 
 [libraries]
 com-bitwarden-sdk-secrets = { module = "com.bitwarden:sdk-secrets", version.ref = "com-bitwarden-sdk-secrets" }
