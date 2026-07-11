@@ -44,7 +44,9 @@ val gitVersion: groovy.lang.Closure<String> by extra
 version = gitVersion() // version set by the plugin, based on the Git tag
 
 java {
-    sourceCompatibility = JavaVersion.VERSION_21
+        toolchain {
+        languageVersion = JavaLanguageVersion.of(25)
+    }
     withSourcesJar()
     withJavadocJar()
 }
