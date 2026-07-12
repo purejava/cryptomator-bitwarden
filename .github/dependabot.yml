@@ -1,4 +1,12 @@
 version: 2
+
+registries:
+  bitwarden-github-packages:
+    type: maven-repository
+    url: https://maven.pkg.github.com/bitwarden/sdk
+    username: ${{secrets.PACKAGES_USER}}
+    password: ${{secrets.PACKAGES_ACCESS_TOKEN}}
+
 updates:
   - package-ecosystem: "gradle"
     directory: "/"
