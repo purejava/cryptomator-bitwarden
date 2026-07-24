@@ -6,6 +6,9 @@
 [![GitHub Release](https://img.shields.io/github/v/release/purejava/cryptomator-bitwarden)](https://github.com/purejava/cryptomator-bitwarden/releases)
 [![License](https://img.shields.io/github/license/purejava/cryptomator-bitwarden.svg)](https://github.com/purejava/cryptomator-bitwarden/blob/master/LICENSE)
 [![Donate](https://img.shields.io/badge/Donate-PayPal-green.svg)](https://www.paypal.com/donate?hosted_button_id=XVX9ZM7WE4ANL)
+<a href="#supported-platforms"><img alt="Windows" src="https://img.shields.io/badge/Windows-supported-blue.svg" /></a>
+<a href="#supported-platforms"><img alt="macOS" src="https://img.shields.io/badge/macOS-supported-blue.svg" /></a>
+<a href="#supported-platforms"><img alt="Linux" src="https://img.shields.io/badge/Linux-supported-blue.svg" /></a>
 
 Plug-in for Cryptomator to store vault passwords in Bitwarden Secrets Manager
 
