@@ -1,5 +1,9 @@
 package org.purejava.integrations.keychain;
 
+import java.util.Arrays;
+import java.util.Optional;
+import java.util.UUID;
+
 import com.bitwarden.sdk.BitwardenClient;
 import com.bitwarden.sdk.BitwardenClientException;
 import com.bitwarden.sdk.BitwardenSettings;
@@ -8,10 +12,6 @@ import org.cryptomator.integrations.keychain.KeychainAccessException;
 import org.cryptomator.integrations.keychain.KeychainAccessProvider;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-
-import java.util.Arrays;
-import java.util.Optional;
-import java.util.UUID;
 
 public class BitwardenAccess implements KeychainAccessProvider {
 
